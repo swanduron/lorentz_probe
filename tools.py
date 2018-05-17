@@ -27,6 +27,8 @@ def ssh_link(ip, username, password):
         time.sleep(30)
         for each_vm in vm_vmid_list:
             stdin, stdout, stderr = ssh_shooter.exec_command('vim-cmd vmsvc/power.off %s' % each_vm)
+        time.sleep(10)
+        stdin, stdout, stderr = ssh_shooter.exec_command('poweroff')
     except Exception as e:
         print(e)
 
@@ -55,6 +57,8 @@ def ping_probe(working_json):
         print('ping_res >>:', ping_res)
         if 'time=' in ping_res:
             working_json['default']['ping_timestamp'][ip_index] = int(time.time())
+            with open(config.JSON_FILE_PATH, mode='w') as json_file_obj:
+                json.dump(working_json, json_file_obj, indent=2)
 
 
 def get_config_file(renew_flag=False, load_flag=True):
